@@ -9,12 +9,16 @@
 
     <ItemGroup>
         <PackageReference Include="Emgu.CV" Version="4.7.0.5276" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3"/>
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="Models\Entities\" />
-      <Folder Include="Repositories\" />
     </ItemGroup>
 
 </Project>
