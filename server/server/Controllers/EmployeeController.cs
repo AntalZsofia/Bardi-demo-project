@@ -16,6 +16,7 @@ public class EmployeeController : ControllerBase
     }
 
     [HttpPost]
+    [Route("register")]
     public async Task<IActionResult> RegisterEmployee([FromBody] RegisterEmployeeDto registerEmployeeDto)
     {
         try
@@ -38,6 +39,7 @@ public class EmployeeController : ControllerBase
     }
 
     [HttpPost]
+    [Route("login")]
     public async Task<IActionResult> LoginEmployee(LoginEmployeeDto loginEmployeeDto)
     {
         try
