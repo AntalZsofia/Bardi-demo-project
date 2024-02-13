@@ -1,9 +1,10 @@
 using Bardi_demo_project.Models.RequestDto;
 using Bardi_demo_project.Services;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bardi_demo_project.Controllers;
-
+[EnableCors("AllowOrigin")]
 [ApiController]
 [Route("[controller]")]
 public class EmployeeController : ControllerBase
