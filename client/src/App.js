@@ -7,7 +7,7 @@ import Login from './components/Login';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/'>
-      <Route path='/register' element={<Registration />} />
+      <Route path='/' element={<Registration />} />
       <Route path='/login' element={<Login />} />
     </Route>
   )
