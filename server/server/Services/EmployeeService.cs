@@ -30,6 +30,7 @@ public class EmployeeService : IEmployeeService
            double[] vector = _vectorService.ConvertToVector(croppedImage);
            
            //create random identification number
+           
            int identificationNumber;
            do
            {
@@ -45,7 +46,7 @@ public class EmployeeService : IEmployeeService
            };
 
            await _employeeRepository.SaveEmployee(employee);
-           return new RegisterResult(true, "Employee registered successfully");
+           return new RegisterResult(true, "Employee registered successfully", employee.IdentificationNumber);
 
         }
         catch (Exception e)
