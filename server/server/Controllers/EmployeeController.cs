@@ -17,7 +17,7 @@ public class EmployeeController : ControllerBase
 
     [HttpPost]
     [Route("register")]
-    public async Task<IActionResult> RegisterEmployee([FromBody] RegisterEmployeeDto registerEmployeeDto)
+    public async Task<IActionResult> RegisterEmployee([FromForm] RegisterEmployeeDto registerEmployeeDto)
     {
         try
         {

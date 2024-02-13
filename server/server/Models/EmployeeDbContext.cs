@@ -16,7 +16,8 @@ public class EmployeeDbContext : DbContext
         modelBuilder.Entity<Employee>().HasData(
             new Employee
             {
-                IdentificationNumber = 1,
+                Id = 1,
+                IdentificationNumber = 1001,
                 Name = "John",
                 VectorOfImage = new double[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }
             }
