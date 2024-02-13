@@ -1,0 +1,86 @@
+.title{
+    text-align: center;
+  font-size: 2em;
+  color: #333;
+  margin-bottom: 20px;
+}
+.container {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+  }
+  
+  .webcam-container, .preview-container {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+    width: 500px;
+    height: 500px;
+  }
+  .webcam-container .webcam{
+    width: 100%;
+    height: 100%;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  form input {
+    margin-bottom: 10px;
+    border-radius: 5px;
+    padding: 10px;
+    flex-direction: column;
+  }
+  
+  form button {
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+  form button:hover {
+    background-color: #367a39;
+  }
+  .message {
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .preview-container img {
+    width: 100%;
+    height: auto;
+  }
+  
+  .preview-container p {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .button-register {
+    background-color: #008CBA;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+
+  .button-register:hover {
+    background-color: #005c7a;
+  }
