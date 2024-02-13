@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Net.Mime;
 using Bardi_demo_project.Models.RequestDto;
 using Emgu.CV;
@@ -16,47 +18,46 @@ public class ImageService : IImageService
     {
         try
         {
+            
             using (MemoryStream memoryStream = new MemoryStream())
             {
                 await image.CopyToAsync(memoryStream);
                 memoryStream.Position = 0;
-
-                // Convert the memory stream to a byte array
+                
                 byte[] imageBytes = memoryStream.ToArray();
-
-                // Use Imdecode to read the image directly from the byte array
                 Mat imageMat = new Mat();
                 CvInvoke.Imdecode(imageBytes, ImreadModes.Color, imageMat);
-
-                //convert to grey scale
-                Mat greyImage = new Mat();
-                CvInvoke.CvtColor(imageMat, greyImage, ColorConversion.Bgr2Gray);
+                
                 
                 Rectangle[] faces = FaceCascade.DetectMultiScale(imageMat, 1.1, 3);
-                if (faces.Length == 1)
+                if(faces != null && faces.Length > 0)
                 {
                     Rectangle faceRec = faces[0];
-                    Mat croppedFaceMat = new Mat(greyImage, faceRec);
-
-                    return croppedFaceMat;
-                }
-                else if (faces.Length == 0)
-                {
-                    // No faces detected
-                    throw new Exception("No faces detected in the image.");
+                    Mat croppedFaceMat = new Mat(imageMat, faceRec);
+                    Mat greyCroppedFaceMat = ConvertToGrayscale(croppedFaceMat);
+                    return greyCroppedFaceMat;
                 }
                 else
                 {
-                    // More than one face detected
-                    throw new Exception("More than one face detected in the image. Expected only one face.");
+                    throw new Exception("No faces detected in the image.");
                 }
             }
+          
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            throw new Exception("Error processing the image.", ex);
+            throw new Exception(e.Message);
         }
-    }
+                
+        
+        
+    } 
+    public Mat ConvertToGrayscale(Mat image)
+        {
+            Mat grayImage = new Mat();
+            CvInvoke.CvtColor(image, grayImage, ColorConversion.Bgr2Gray);
+            return grayImage;
+        }
 
    
 }
