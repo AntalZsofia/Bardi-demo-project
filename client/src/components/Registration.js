@@ -16,43 +16,73 @@ export default function Registration() {
 
   const capture = (event) => {
     event.preventDefault();
-    const imageSrc = webcamRef.current.getScreenshot();
+    const imageSrc = webcamRef.current.getScreenshot({ mimeType: 'image/jpeg', quality: 0.8 });
     setImagePreview(imageSrc);
     setNameConfirmed(namePreview);
   }
 
-  const handleRegistration = () => {
-    if (!isValidName(namePreview)) {
-      setError("Name must be at least 4 characters long");
+  function base64StringToBlob(base64String, contentType) {
+    console.log(base64String);
+    const byteCharacters = atob(base64String);
+    const byteArrays = [];
+
+    for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+        const slice = byteCharacters.slice(offset, offset + 512);
+
+        const byteNumbers = new Array(slice.length);
+        for (let i = 0; i < slice.length; i++) {
+            byteNumbers[i] = slice.charCodeAt(i);
+        }
+
+        const byteArray = new Uint8Array(byteNumbers);
+        byteArrays.push(byteArray);
     }
     
-      setImageConfirmed(imagePreview);
-      setNameConfirmed(namePreview);
-    
-      const userData = new FormData();
-      userData.append('name', nameConfirmed);
-      userData.append('image', imageConfirmed);
-       
-      
-      
-      fetch('https://localhost:7017/Employee/register', {
+
+    return new Blob(byteArrays, { type: contentType });
+}
+
+  const handleRegistration = async () => {
+    if (!isValidName(namePreview)) {
+      setError("Name must be at least 4 characters long");
+      return;
+    }
+
+    setImageConfirmed(imagePreview);
+    setNameConfirmed(namePreview);
+
+    const blob = base64StringToBlob(imagePreview, 'image/png');
+
+    const userData = new FormData();
+    userData.append('Name', nameConfirmed);
+    userData.append('Image', blob);
+
+    try {
+      const response = await fetch('https://localhost:7017/Employee/register', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
         body: userData,
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Success:', data);
-        navigate('/login');
-      })
-      .catch((error) => {
-        console.error('Error:', error);
+        headers: {
+          'Content-Type': 'multipart/form-data'}
       });
 
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      let data;
+      if (response.headers.get('Content-Type').includes('application/json')) {
+        data = await response.json();
+      } else {
+        data = await response.text();
+      }
+      console.log('Success:', data);
+      alert(`Registration successful! Your identification Number is: ${data.EmployeeIdentificationNumber}`);
+      navigate('/login');
+    } catch (error) {
+      console.error('Error:', error);
+    }
   }
- 
+
 
   return (
     <div>
@@ -60,29 +90,32 @@ export default function Registration() {
       <div className='container'>
         <div className='webcam-container'>
           <form onSubmit={handleRegistration}>
-            <label>
-              <input placeholder='Name' type="text" value={namePreview} onChange={e => setNamePreview(e.target.value)} />
-            </label>
             <Webcam
               audio={false}
               ref={webcamRef}
               screenshotFormat="image/jpeg"
               className='webcam'
             />
+            <label>
+              <input placeholder='Your name' type="text" value={namePreview} onChange={e => setNamePreview(e.target.value)} />
+            </label>
             <button onClick={capture} type='button'>Capture photo</button>
-            <p className='message'>Please make sure you are looking ahead or into the camera when you take a photo.</p>
-            </form>
-            {error && <p>{error}</p>}
-            </div>
-            <div className='preview-container'>
-            {imagePreview && (
+
+          </form>
+          {error && <p className='error-message'>{error}</p>}
+        </div>
+        <div className='preview-container'>
+          {imagePreview ? (
             <div>
               <img src={imagePreview} alt="Preview" />
               <p>Name: {nameConfirmed}</p>
-              <button onClick={handleRegistration} type='button' className='button-register'>Register</button>
+              <div className='button-container'>
+                <button onClick={handleRegistration} type='button' className='button-register'>Register</button>
+              </div>
             </div>
-          )}
-          {imageConfirmed && <img src={imageConfirmed} alt="Confirmed" />}
+          )
+            : <p className='preview-title'>Preview</p>}
+
         </div>
       </div>
     </div>
